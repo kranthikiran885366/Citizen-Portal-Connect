@@ -1,91 +1,152 @@
 import Layout from "@/components/Layout";
-import { BarChart3, TrendingUp, Star, Award, CheckCircle, Clock } from "lucide-react";
+import { BarChart3, TrendingUp, Star, Award, CheckCircle, Clock, Target, Zap } from "lucide-react";
 
 const monthlyData = [
   { month: "Jan", assigned: 18, resolved: 15 },
-  { month: "Feb", assigned: 22, resolved: 20 },
-  { month: "Mar", assigned: 19, resolved: 17 },
-  { month: "Apr", assigned: 14, resolved: 12 },
+  { month: "Feb", assigned: 22, resolved: 19 },
+  { month: "Mar", assigned: 16, resolved: 14 },
+  { month: "Apr", assigned: 25, resolved: 21 },
+  { month: "May", assigned: 20, resolved: 18 },
+  { month: "Jun", assigned: 28, resolved: 24 },
 ];
 
+const maxVal = Math.max(...monthlyData.map(d => d.assigned));
+
 export default function OfficerPerformance() {
-  const maxVal = Math.max(...monthlyData.map(d => d.assigned));
+  const totalAssigned = monthlyData.reduce((sum, d) => sum + d.assigned, 0);
+  const totalResolved = monthlyData.reduce((sum, d) => sum + d.resolved, 0);
+  const avgRate = Math.round((totalResolved / totalAssigned) * 100);
 
   return (
     <Layout role="officer" userName="Suresh Singh">
-      <div className="space-y-5">
+      <div className="space-y-5 max-w-5xl">
         <div>
-          <h2 className="text-xl font-bold text-foreground">Performance Metrics</h2>
-          <p className="text-sm text-muted-foreground">Your personal analytics</p>
+          <h2 className="text-2xl font-bold text-foreground">Performance Dashboard</h2>
+          <p className="text-muted-foreground mt-1">Track your complaint resolution metrics and citizen satisfaction scores.</p>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          <div className="bg-card border border-border rounded-xl p-4 text-center">
-            <Star className="h-6 w-6 text-yellow-500 mx-auto mb-1" />
-            <p className="text-2xl font-bold text-foreground">4.5</p>
-            <p className="text-xs text-muted-foreground">Avg. Rating</p>
-          </div>
-          <div className="bg-card border border-border rounded-xl p-4 text-center">
-            <CheckCircle className="h-6 w-6 text-green-600 mx-auto mb-1" />
-            <p className="text-2xl font-bold text-foreground">83%</p>
-            <p className="text-xs text-muted-foreground">Resolution Rate</p>
-          </div>
-          <div className="bg-card border border-border rounded-xl p-4 text-center">
-            <Clock className="h-6 w-6 text-blue-600 mx-auto mb-1" />
-            <p className="text-2xl font-bold text-foreground">1.8d</p>
-            <p className="text-xs text-muted-foreground">Avg. Resolution Time</p>
-          </div>
-          <div className="bg-card border border-border rounded-xl p-4 text-center">
-            <Award className="h-6 w-6 text-purple-600 mx-auto mb-1" />
-            <p className="text-2xl font-bold text-foreground">#3</p>
-            <p className="text-xs text-muted-foreground">Dept. Rank</p>
-          </div>
-        </div>
-
-        <div className="bg-card border border-border rounded-xl p-4">
-          <h3 className="font-semibold text-foreground mb-4">Monthly Performance</h3>
-          <div className="flex items-end gap-4 h-40">
-            {monthlyData.map((d) => (
-              <div key={d.month} className="flex-1 flex flex-col items-center gap-1">
-                <div className="w-full flex items-end gap-1 justify-center" style={{ height: "100px" }}>
-                  <div
-                    className="w-5 bg-blue-200 rounded-t"
-                    style={{ height: `${(d.assigned / maxVal) * 100}px` }}
-                    title={`Assigned: ${d.assigned}`}
-                  />
-                  <div
-                    className="w-5 bg-green-500 rounded-t"
-                    style={{ height: `${(d.resolved / maxVal) * 100}px` }}
-                    title={`Resolved: ${d.resolved}`}
-                  />
-                </div>
-                <span className="text-xs text-muted-foreground">{d.month}</span>
-              </div>
-            ))}
-          </div>
-          <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
-            <div className="flex items-center gap-1"><div className="h-3 w-3 rounded bg-blue-200" /> Assigned</div>
-            <div className="flex items-center gap-1"><div className="h-3 w-3 rounded bg-green-500" /> Resolved</div>
-          </div>
-        </div>
-
-        <div className="bg-card border border-border rounded-xl p-4">
-          <h3 className="font-semibold text-foreground mb-3">Citizen Feedback Summary</h3>
-          <div className="space-y-2">
-            {[5, 4, 3, 2, 1].map((star) => {
-              const counts = { 5: 7, 4: 2, 3: 1, 2: 0, 1: 0 };
-              const total = Object.values(counts).reduce((a, b) => a + b, 0);
-              const pct = Math.round((counts[star] / total) * 100);
-              return (
-                <div key={star} className="flex items-center gap-2 text-sm">
-                  <span className="text-yellow-500 w-16">{"★".repeat(star)}{"☆".repeat(5-star)}</span>
-                  <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
-                    <div className="h-full bg-yellow-400 rounded-full" style={{ width: `${pct}%` }} />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {[
+            { label: "Resolution Rate", value: `${avgRate}%`, icon: Target, color: "text-blue-600", bg: "bg-blue-50", change: 5 },
+            { label: "Avg. Resolution Time", value: "3.2 days", icon: Clock, color: "text-orange-600", bg: "bg-orange-50" },
+            { label: "Citizen Rating", value: "4.5 / 5", icon: Star, color: "text-amber-600", bg: "bg-amber-50", change: 3 },
+            { label: "SLA Compliance", value: "92%", icon: CheckCircle, color: "text-emerald-600", bg: "bg-emerald-50", change: -2 },
+          ].map((item) => {
+            const Icon = item.icon;
+            return (
+              <div key={item.label} className="bg-card border border-border rounded-xl p-5 shadow-sm">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">{item.label}</p>
+                    <p className="text-3xl font-bold text-foreground">{item.value}</p>
+                    {item.change !== undefined && (
+                      <p className={`text-xs font-semibold mt-1.5 ${item.change >= 0 ? "text-emerald-600" : "text-red-500"}`}>
+                        {item.change >= 0 ? "+" : ""}{item.change}% vs last month
+                      </p>
+                    )}
                   </div>
-                  <span className="text-muted-foreground w-8 text-right">{counts[star]}</span>
+                  <div className={`p-2.5 rounded-xl ${item.bg}`}>
+                    <Icon className={`h-5 w-5 ${item.color}`} />
+                  </div>
                 </div>
-              );
-            })}
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="grid lg:grid-cols-3 gap-4">
+          <div className="lg:col-span-2 bg-card border border-border rounded-2xl p-5 shadow-sm">
+            <div className="flex items-center justify-between mb-5">
+              <div>
+                <h3 className="font-bold text-foreground">Monthly Performance</h3>
+                <p className="text-sm text-muted-foreground mt-0.5">Assigned vs resolved complaints over 6 months</p>
+              </div>
+              <div className="flex items-center gap-4 text-xs">
+                <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-sm bg-primary block" /> Assigned</span>
+                <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-sm bg-emerald-500 block" /> Resolved</span>
+              </div>
+            </div>
+            <div className="flex items-end gap-3 h-44">
+              {monthlyData.map((d) => (
+                <div key={d.month} className="flex-1 flex flex-col items-center gap-1">
+                  <div className="w-full flex items-end gap-0.5 h-36">
+                    <div
+                      className="flex-1 bg-blue-100 hover:bg-blue-200 rounded-t-lg transition-colors relative group"
+                      style={{ height: `${(d.assigned / maxVal) * 100}%` }}
+                    >
+                      <div className="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 text-xs font-bold text-foreground whitespace-nowrap">
+                        {d.assigned}
+                      </div>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div
+                          className="w-full bg-primary rounded-t-lg"
+                          style={{ height: `${(d.assigned / maxVal) * 100}%` }}
+                        />
+                      </div>
+                    </div>
+                    <div
+                      className="flex-1 bg-emerald-500 hover:bg-emerald-600 rounded-t-lg transition-colors"
+                      style={{ height: `${(d.resolved / maxVal) * 100}%` }}
+                    />
+                  </div>
+                  <span className="text-xs font-semibold text-muted-foreground">{d.month}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="bg-card border border-border rounded-2xl p-5 shadow-sm">
+              <div className="flex items-center gap-2 mb-4">
+                <Star className="h-4 w-4 text-amber-500" />
+                <h3 className="font-bold text-foreground">Citizen Ratings</h3>
+              </div>
+              <div className="space-y-2">
+                {[5, 4, 3, 2, 1].map((star) => {
+                  const count = [3, 5, 1, 1, 0][5 - star];
+                  const pct = (count / 10) * 100;
+                  return (
+                    <div key={star} className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-foreground w-4">{star}</span>
+                      <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                        <div className="h-full bg-amber-400 rounded-full" style={{ width: `${pct}%` }} />
+                      </div>
+                      <span className="text-xs text-muted-foreground w-4">{count}</span>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="text-center mt-4 pt-3 border-t border-border">
+                <div className="flex justify-center gap-0.5 mb-1">
+                  {"★★★★★".split("").map((s, i) => (
+                    <span key={i} className={`text-xl ${i < 4 ? "text-amber-400" : "text-gray-200"}`}>{s}</span>
+                  ))}
+                </div>
+                <p className="text-2xl font-bold text-foreground">4.5</p>
+                <p className="text-xs text-muted-foreground">Based on 10 ratings</p>
+              </div>
+            </div>
+
+            <div className="bg-card border border-border rounded-2xl p-5 shadow-sm">
+              <div className="flex items-center gap-2 mb-4">
+                <Award className="h-4 w-4 text-primary" />
+                <h3 className="font-bold text-foreground">Achievements</h3>
+              </div>
+              <div className="space-y-2">
+                {[
+                  { label: "5-Star Rating", icon: "⭐", achieved: true },
+                  { label: "Zero Breach Month", icon: "🏆", achieved: true },
+                  { label: "Speed Resolver", icon: "⚡", achieved: true },
+                  { label: "100 Resolved", icon: "🎯", achieved: false },
+                ].map((a) => (
+                  <div key={a.label} className={`flex items-center gap-3 p-2.5 rounded-xl ${a.achieved ? "bg-blue-50" : "bg-muted/40 opacity-60"}`}>
+                    <span className="text-lg">{a.icon}</span>
+                    <span className={`text-sm font-semibold ${a.achieved ? "text-blue-800" : "text-muted-foreground"}`}>{a.label}</span>
+                    {a.achieved && <CheckCircle className="h-4 w-4 text-emerald-500 ml-auto" />}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -1,43 +1,68 @@
-import { statusColors, priorityColors } from "@/lib/data";
-import { Clock, User, Building2 } from "lucide-react";
+import { Clock, User, Building2, ChevronRight } from "lucide-react";
+
+const statusStyle = {
+  "pending": "bg-amber-50 text-amber-700 border-amber-200",
+  "acknowledged": "bg-blue-50 text-blue-700 border-blue-200",
+  "in-progress": "bg-orange-50 text-orange-700 border-orange-200",
+  "resolved": "bg-emerald-50 text-emerald-700 border-emerald-200",
+  "closed": "bg-gray-50 text-gray-600 border-gray-200",
+};
+
+const priorityStyle = {
+  "low": "bg-slate-50 text-slate-600 border-slate-200",
+  "medium": "bg-sky-50 text-sky-700 border-sky-200",
+  "high": "bg-orange-50 text-orange-700 border-orange-200",
+  "urgent": "bg-red-50 text-red-700 border-red-200",
+};
+
+const priorityDot = {
+  "low": "bg-slate-400",
+  "medium": "bg-sky-500",
+  "high": "bg-orange-500",
+  "urgent": "bg-red-500",
+};
 
 export default function ComplaintCard({ complaint, onClick }) {
   return (
     <div
-      className="bg-card border border-border rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+      className="bg-card border border-border rounded-xl hover:border-primary/30 hover:shadow-md transition-all cursor-pointer group"
       onClick={() => onClick && onClick(complaint)}
       data-testid={`complaint-card-${complaint.id}`}
     >
-      <div className="flex items-start justify-between gap-2">
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs font-mono text-muted-foreground">{complaint.id}</span>
-            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${statusColors[complaint.status]}`}>
-              {complaint.status.replace("-", " ")}
-            </span>
-            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${priorityColors[complaint.priority]}`}>
-              {complaint.priority}
-            </span>
+      <div className="p-4">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 flex-wrap mb-2">
+              <span className="text-[11px] font-mono font-semibold text-muted-foreground bg-muted px-2 py-0.5 rounded">{complaint.id}</span>
+              <span className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full border ${statusStyle[complaint.status]}`}>
+                {complaint.status.replace("-", " ")}
+              </span>
+              <span className={`inline-flex items-center gap-1.5 text-[11px] font-semibold px-2 py-0.5 rounded-full border ${priorityStyle[complaint.priority]}`}>
+                <span className={`w-1.5 h-1.5 rounded-full ${priorityDot[complaint.priority]}`} />
+                {complaint.priority}
+              </span>
+            </div>
+            <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors text-[15px] leading-snug">{complaint.title}</h3>
+            <p className="text-sm text-muted-foreground mt-1 line-clamp-1">{complaint.description}</p>
           </div>
-          <h3 className="font-semibold text-foreground mt-1 truncate">{complaint.title}</h3>
-          <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{complaint.description}</p>
+          <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0 mt-1 group-hover:text-primary transition-colors" />
         </div>
-      </div>
-      <div className="flex items-center gap-4 mt-3 text-xs text-muted-foreground">
-        <span className="flex items-center gap-1">
-          <Building2 className="h-3 w-3" />
-          {complaint.department}
-        </span>
-        <span className="flex items-center gap-1">
-          <Clock className="h-3 w-3" />
-          {complaint.date}
-        </span>
-        {complaint.citizen && (
-          <span className="flex items-center gap-1">
-            <User className="h-3 w-3" />
-            {complaint.citizen}
+        <div className="flex items-center gap-4 mt-3 pt-3 border-t border-border text-xs text-muted-foreground">
+          <span className="flex items-center gap-1.5">
+            <Building2 className="h-3.5 w-3.5" />
+            {complaint.department}
           </span>
-        )}
+          <span className="flex items-center gap-1.5">
+            <Clock className="h-3.5 w-3.5" />
+            {complaint.date}
+          </span>
+          {complaint.citizen && (
+            <span className="flex items-center gap-1.5">
+              <User className="h-3.5 w-3.5" />
+              {complaint.citizen}
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );
