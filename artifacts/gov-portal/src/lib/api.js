@@ -1,6 +1,8 @@
 export const API_BASE = import.meta.env.VITE_API_URL
   ? `${import.meta.env.VITE_API_URL}/api`
-  : "/api";
+  : typeof window !== "undefined" && window.location.hostname !== "localhost"
+    ? "https://citizen-portal-connect.onrender.com/api"
+    : "/api";
 const STORAGE_KEY = "govcare.auth";
 const SESSION_KEY = "govcare.auth.session";
 
