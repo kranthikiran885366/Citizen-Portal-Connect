@@ -26,18 +26,10 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    environment:
-      PORT: 5000
-      HOST: 0.0.0.0
-      NODE_ENV: development
-      DATABASE_URL: postgresql://govcare_user:govcare_pass@postgres:5432/govcare
-      JWT_SECRET: govcare_jwt_super_secret_key_change_in_production_32chars
-      JWT_EXPIRES_IN: 15m
-      REFRESH_TOKEN_DAYS: 7
-      CORS_ORIGIN: http://localhost:5173,http://localhost:3000
+    env_file:
+      - .env
     ports:
       - "5000:5000"
-    command: sh -c "node src/config/migrate.js; node src/server.js"
 
 volumes:
   govcare_pgdata:
