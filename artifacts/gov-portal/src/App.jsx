@@ -2,13 +2,17 @@ import { Switch, Route, Router as WouterRouter } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthProvider, ProtectedRoute } from "@/lib/AuthContext";
 
 import Landing from "@/pages/Landing";
+import Login from "@/pages/Login";
+import Register from "@/pages/Register";
 import CitizenDashboard from "@/pages/citizen/CitizenDashboard";
 import FileComplaint from "@/pages/citizen/FileComplaint";
 import TrackStatus from "@/pages/citizen/TrackStatus";
 import ComplaintHistory from "@/pages/citizen/ComplaintHistory";
 import CitizenProfile from "@/pages/citizen/CitizenProfile";
+import DepartmentsDirectory from "@/pages/citizen/DepartmentsDirectory";
 import OfficerDashboard from "@/pages/officer/OfficerDashboard";
 import OfficerComplaints from "@/pages/officer/OfficerComplaints";
 import OfficerSLA from "@/pages/officer/OfficerSLA";
@@ -22,8 +26,8 @@ import AdminSLA from "@/pages/admin/AdminSLA";
 import AdminAudit from "@/pages/admin/AdminAudit";
 import AdminSettings from "@/pages/admin/AdminSettings";
 import DepartmentPage from "@/pages/DepartmentPage";
-
 import NotFound from "@/pages/not-found";
+import Statistics from "@/pages/Statistics";
 
 const queryClient = new QueryClient();
 
@@ -31,29 +35,71 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Landing} />
+      <Route path="/login" component={Login} />
+      <Route path="/register" component={Register} />
 
-      <Route path="/citizen" component={CitizenDashboard} />
-      <Route path="/citizen/complaint/new" component={FileComplaint} />
-      <Route path="/citizen/track" component={TrackStatus} />
-      <Route path="/citizen/history" component={ComplaintHistory} />
-      <Route path="/citizen/profile" component={CitizenProfile} />
+      <Route path="/citizen">
+        {() => <ProtectedRoute roles={["citizen"]}><CitizenDashboard /></ProtectedRoute>}
+      </Route>
+      <Route path="/citizen/complaint/new">
+        {() => <ProtectedRoute roles={["citizen"]}><FileComplaint /></ProtectedRoute>}
+      </Route>
+      <Route path="/citizen/track">
+        {() => <ProtectedRoute roles={["citizen"]}><TrackStatus /></ProtectedRoute>}
+      </Route>
+      <Route path="/citizen/history">
+        {() => <ProtectedRoute roles={["citizen"]}><ComplaintHistory /></ProtectedRoute>}
+      </Route>
+      <Route path="/citizen/departments">
+        {() => <ProtectedRoute roles={["citizen"]}><DepartmentsDirectory /></ProtectedRoute>}
+      </Route>
+      <Route path="/citizen/profile">
+        {() => <ProtectedRoute roles={["citizen"]}><CitizenProfile /></ProtectedRoute>}
+      </Route>
 
-      <Route path="/officer" component={OfficerDashboard} />
-      <Route path="/officer/complaints" component={OfficerComplaints} />
-      <Route path="/officer/sla" component={OfficerSLA} />
-      <Route path="/officer/performance" component={OfficerPerformance} />
-      <Route path="/officer/profile" component={OfficerProfile} />
+      <Route path="/officer">
+        {() => <ProtectedRoute roles={["officer"]}><OfficerDashboard /></ProtectedRoute>}
+      </Route>
+      <Route path="/officer/complaints">
+        {() => <ProtectedRoute roles={["officer"]}><OfficerComplaints /></ProtectedRoute>}
+      </Route>
+      <Route path="/officer/sla">
+        {() => <ProtectedRoute roles={["officer"]}><OfficerSLA /></ProtectedRoute>}
+      </Route>
+      <Route path="/officer/performance">
+        {() => <ProtectedRoute roles={["officer"]}><OfficerPerformance /></ProtectedRoute>}
+      </Route>
+      <Route path="/officer/profile">
+        {() => <ProtectedRoute roles={["officer"]}><OfficerProfile /></ProtectedRoute>}
+      </Route>
 
-      <Route path="/admin" component={AdminDashboard} />
-      <Route path="/admin/analytics" component={AdminAnalytics} />
-      <Route path="/admin/officers" component={AdminOfficers} />
-      <Route path="/admin/departments" component={AdminDepartments} />
-      <Route path="/admin/sla" component={AdminSLA} />
-      <Route path="/admin/audit" component={AdminAudit} />
-      <Route path="/admin/settings" component={AdminSettings} />
+      <Route path="/admin">
+        {() => <ProtectedRoute roles={["admin"]}><AdminDashboard /></ProtectedRoute>}
+      </Route>
+      <Route path="/admin/analytics">
+        {() => <ProtectedRoute roles={["admin"]}><AdminAnalytics /></ProtectedRoute>}
+      </Route>
+      <Route path="/admin/officers">
+        {() => <ProtectedRoute roles={["admin"]}><AdminOfficers /></ProtectedRoute>}
+      </Route>
+      <Route path="/admin/departments">
+        {() => <ProtectedRoute roles={["admin"]}><AdminDepartments /></ProtectedRoute>}
+      </Route>
+      <Route path="/admin/sla">
+        {() => <ProtectedRoute roles={["admin"]}><AdminSLA /></ProtectedRoute>}
+      </Route>
+      <Route path="/admin/audit">
+        {() => <ProtectedRoute roles={["admin"]}><AdminAudit /></ProtectedRoute>}
+      </Route>
+      <Route path="/admin/settings">
+        {() => <ProtectedRoute roles={["admin"]}><AdminSettings /></ProtectedRoute>}
+      </Route>
+
+      <Route path="/statistics">
+        {() => <Statistics />}
+      </Route>
 
       <Route path="/department/:id" component={DepartmentPage} />
-
       <Route component={NotFound} />
     </Switch>
   );
@@ -63,8 +109,10 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <WouterRouter base={import.meta.env.BASE_URL?.replace(/\/$/, "") || ""}>
-          <Router />
+        <WouterRouter base="">
+          <AuthProvider>
+            <Router />
+          </AuthProvider>
         </WouterRouter>
         <Toaster />
       </TooltipProvider>
