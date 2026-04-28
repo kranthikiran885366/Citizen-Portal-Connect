@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "type": "module",
   "main": "src/server.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
+    "build": "npm install",
+    "start": "node src/config/migrate.js && node src/server.js",
     "dev": "node --watch src/server.js",
-    "start": "node src/server.js",
     "db:migrate": "node src/config/migrate.js",
     "db:seed": "node src/config/seed.js",
     "db:setup": "node src/config/migrate.js && node src/config/seed.js"
