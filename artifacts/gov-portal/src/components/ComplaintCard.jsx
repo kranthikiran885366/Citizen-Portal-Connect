@@ -25,10 +25,11 @@ const priorityDot = {
 export default function ComplaintCard({ complaint, onClick }) {
   return (
     <div
-      className="bg-card border border-border rounded-xl hover:border-primary/30 hover:shadow-md transition-all cursor-pointer group"
+      className="group cursor-pointer overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-[0_18px_40px_rgba(15,23,42,0.08)]"
       onClick={() => onClick && onClick(complaint)}
       data-testid={`complaint-card-${complaint.id}`}
     >
+      <div className="h-1.5 bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500" />
       <div className="p-4">
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
@@ -47,7 +48,7 @@ export default function ComplaintCard({ complaint, onClick }) {
           </div>
           <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0 mt-1 group-hover:text-primary transition-colors" />
         </div>
-        <div className="flex items-center gap-4 mt-3 pt-3 border-t border-border text-xs text-muted-foreground">
+        <div className="flex items-center gap-4 mt-3 pt-3 border-t border-slate-100 text-xs text-muted-foreground">
           <span className="flex items-center gap-1.5">
             <Building2 className="h-3.5 w-3.5" />
             {complaint.department}

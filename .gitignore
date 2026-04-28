@@ -1,49 +1,60 @@
-# See https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+# ─── Dependencies ───────────────────────────────────────────
+node_modules/
+.pnpm-store/
+.npm-cache/
+.yarn/
 
-# compiled output
-dist
-tmp
-out-tsc
+# ─── Build outputs ──────────────────────────────────────────
+dist/
+tmp/
+out-tsc/
+build/
 *.tsbuildinfo
-.expo
-.expo-shared
 
-# dependencies
-node_modules
+# ─── Environment / Secrets ──────────────────────────────────
+# Keep .env.example but ignore real .env files
+.env
+.env.local
+.env.*.local
+# Exception: allow the example file
+!.env.example
 
-# IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
+# ─── Logs ───────────────────────────────────────────────────
+*.log
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
-# IDE - VSCode
+# ─── OS / Editor ────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+*.sublime-workspace
+*.launch
+.project
+.classpath
+.c9/
+.settings/
 
-# misc
-/.sass-cache
-/connect.lock
-/coverage
-/libpeerconnection.log
-npm-debug.log
-yarn-error.log
-testem.log
-/typings
-
-# System Files
-.DS_Store
-Thumbs.db
-
-.cursor/rules/nx-rules.mdc
-.github/instructions/nx.instructions.md
-
-# Replit
+# ─── Replit / CI cache ──────────────────────────────────────
 .cache/
 .local/
+.replit-artifact/
+.replitignore
+
+# ─── Test / Coverage ────────────────────────────────────────
+coverage/
+.nyc_output/
+
+# ─── Misc ───────────────────────────────────────────────────
+.sass-cache/
+connect.lock
+libpeerconnection.log
+typings/
+.expo/
+.expo-shared/

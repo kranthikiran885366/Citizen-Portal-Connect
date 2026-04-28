@@ -2,8 +2,8 @@ import { TrendingUp, TrendingDown } from "lucide-react";
 
 export default function StatCard({ title, value, icon: Icon, color = "text-primary", bg = "bg-blue-50", change, subtitle, border = "border-l-blue-500" }) {
   return (
-    <div className={`bg-card rounded-xl border border-border shadow-sm overflow-hidden`}>
-      <div className={`h-1 w-full ${bg.replace("bg-", "bg-").replace("-50", "-500").replace("-100", "-500")}`} style={{ background: "currentColor", opacity: 0 }} />
+    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_10px_30px_rgba(15,23,42,0.05)]">
+      <div className="h-1 w-full bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500" />
       <div className="p-5">
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
@@ -18,7 +18,7 @@ export default function StatCard({ title, value, icon: Icon, color = "text-prima
             )}
           </div>
           {Icon && (
-            <div className={`p-3 rounded-xl ${bg} shrink-0`}>
+            <div className={`p-3 rounded-2xl ${bg} shrink-0 ring-1 ring-black/5`}>
               <Icon className={`h-6 w-6 ${color}`} strokeWidth={1.75} />
             </div>
           )}

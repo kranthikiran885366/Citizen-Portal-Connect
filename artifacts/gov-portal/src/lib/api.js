@@ -1,4 +1,6 @@
-export const API_BASE = "/api";
+export const API_BASE = import.meta.env.VITE_API_URL
+  ? `${import.meta.env.VITE_API_URL}/api`
+  : "/api";
 const STORAGE_KEY = "govcare.auth";
 const SESSION_KEY = "govcare.auth.session";
 
